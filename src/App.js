@@ -54,8 +54,12 @@ export default function App(props) {
     console.log('Ultima amostra:', size_ARRAY, '::', array_via_map[size_ARRAY])
     console.log(
       '....',
-      moment(array_via_map[1].message.receivedAt).format('DD/MM/YYYY'),
+      //moment(array_via_map[1].message.receivedAt).format('DD/MM/YYYY'),
+      new Date(array_via_map[1].message.receivedAt).getDate(),
+      new Date(array_via_map[1].message.receivedAt).getMonth(),
+      new Date(array_via_map[1].message.receivedAt).getFullYear(),
     )
+
     return array_via_map
   }
 
@@ -65,19 +69,27 @@ export default function App(props) {
     .filter((contactItem) => contactItem.message.contact.name !== null)
     .filter((contactItem) => contactItem.message.contact.name !== '')
     .filter((contactItem) => contactItem.message.contact.name !== undefined)
-    // .filter(
-    //   (contactItem) =>
-    //     moment(contactItem.message.receivedAt).format('DD/MM/YYYY') >=
-    //     moment(data_01).format('DD/MM/YYYY'),
-    // )
-    ////
+
+    // COMPARA O DIA >= entao pega o que vem antes
     .filter(
       (contactItem) =>
-        new Date(moment(contactItem.message.receivedAt).format('DD/MM/YYYY')) >=
-        new Date(moment(data_01).format('DD/MM/YYYY')),
+        new Date(data_01).getDate() >=
+        new Date(contactItem.message.receivedAt).getDate(),
     )
-    // .filter((contactItem) => contactItem.deliveredAt >= data_02)
-    // moment(array_via_map[1].message.receivedAt).format('DD/MM/YYYY'),
+    // COMPARA O MES >= entao pega o que vem antes
+    // .filter(
+    //   (contactItem) =>
+    //     new Date(data_01).getMonth() >=
+    //     new Date(contactItem.message.receivedAt).getMonth(),
+    // )
+
+    // COMPARA O MES >= entao pega o que vem antes
+    .filter(
+      (contactItem) =>
+        new Date(data_01).getFullYear() >=
+        new Date(contactItem.message.receivedAt).getFullYear(),
+    )
+
     .filter(
       (contactItem) =>
         contactItem.message.contact.name.toLowerCase().includes(lowerBusca),
@@ -90,9 +102,13 @@ export default function App(props) {
   // testes.message.contact.name === 'Eduardo Bento',
 
   useEffect(() => {
-    var data = moment(data_01).format('DD-MM-YYYY')
+    var data = moment(data_01).format('DD/MM/YYYY')
 
     console.log('useEffect ', data)
+    console.log('data_01 in natura ', data_01)
+    console.log('DIA', new Date(data_01).getDate())
+    console.log('MES', new Date(data_01).getMonth())
+    console.log('ANO', new Date(data_01).getFullYear())
     // console.log(
     //   'useEffect ',
     //   new Date(data_01.getDay(), data_01.getMonth(), data_01.getYear()),
@@ -122,13 +138,14 @@ export default function App(props) {
         </div>
 
         <div className="dataFilter">
-          <label for="busca"> Data 01: </label>
+          <label for="busca"> Data INICIAL (até esta data): </label>
           <input
             type="date" // "datetime-local"  funciona tambem
             placeholder="Data Inicial"
-            // value={data_01}
+            value={data_01}
             onChange={(e) => setData_01(e.target.value)}
           />
+          <p>Data selecionada: {moment(data_01).format('DD/MM/YYYY')} </p>
         </div>
       </header>
       <div className="content">
