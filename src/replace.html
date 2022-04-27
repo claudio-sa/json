@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>JavaScript Strings</h1>
+<h2>The replace() Method</h2>
+
+<p>replace() searches a string for a value,
+and returns a new string with the specified value(s) replaced:</p>
+
+<p id="demo">      
+/v1/invenio/webhook/5463ed50-418a-11ec-88d4-15440c614fe7 ==> {"message": {</p>
+
+<script>
+let str = document.getElementById("demo").innerHTML; 
+let res = str.replace(/"|:|&|{|\=|\-|\/|[a-z]|[0-9]*|/g , "");
+document.getElementById("demo").innerHTML = res;
+// var endereço = 'Rua emanuel meira martins 85 cic curitiba'.slice(0, 15) + '...';
+</script>
+
+</body>
+</html>

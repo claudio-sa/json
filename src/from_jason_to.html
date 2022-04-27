@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Store and retrieve data from LOCAL storage </h2>
+<p id="demo"></p>
+
+<script>
+// Storing data:
+const myObj = {
+    "pets":   [ 
+        {
+            "name": "Frank",
+            "animal": "Dog",
+            "colour": "Blue"
+        },
+        {
+            "name": "Jim",
+            "animal": "Cat",
+            "colour": "Green"
+        },
+        {
+            "name": "Pam",
+            "animal": "Cow",
+            "colour": "Red"
+        }
+    ]
+}
+        ;
+
+console.log(myObj);
+const myJSON = JSON.stringify(myObj);
+console.log(myJSON);
+
+// ARMAZENANDO internamente
+localStorage.setItem("teste_JSON", myJSON);
+
+// Retrieving data:
+let text = localStorage.getItem("teste_JSON");
+let obj = JSON.parse(text);
+
+//document.getElementById("demo").innerHTML = obj.pets[0].name;
+//document.getElementById("demo").innerHTML = obj.pets[1].name;
+
+let text_tab = "<table border='2'>"
+  for (let i in obj.pets) {
+    text_tab +=
+      '<tr><td>' +
+      '  ==>  ' +
+      obj.pets[i].name +   " | " +
+      obj.pets[i].animal + " | " +
+      obj.pets[i].colour +
+      '</td></tr>'
+  }
+  text_tab += '</table>'
+
+  document.getElementById('demo').innerHTML = text_tab
+//document.getElementById("demo").innerHTML = obj.city;
+</script>
+
+</body>
+</html>
