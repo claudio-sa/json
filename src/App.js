@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef, useState, useEffect, useLayoutEffect } from "react"
-import axios from "axios"
-import moment from "moment" // para formatar datas etc
-import "./App.css"
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
+import axios from 'axios'
+import moment from 'moment' // para formatar datas etc
+import './App.css'
 
-moment.locale("pt-br")
+moment.locale('pt-br')
 
 export default function App(props) {
   var [listaGlobal, setListaGlobal] = useState([])
-  var [busca, setBusca] = useState("")
+  var [busca, setBusca] = useState('')
   var [filterReceived, setFilterReceived] = useState(false)
   var [filterSent, setFilterSent] = useState(false)
   var [dataIni, setDataIni] = useState(null)
@@ -24,17 +24,17 @@ export default function App(props) {
       .get(umaURL)
       .then((response) => response.data)
       .catch((err) => {
-        console.error("ops! ocorreu um erro" + err)
+        console.error('ops! ocorreu um erro' + err)
       })
 
     const iguais =
-      "\n============================================================================================================================="
+      '\n============================================================================================================================='
     const array_sem_iguais = response_data.split(iguais)
 
     // console.log("array_sem_iguais", array_sem_iguais)
 
     const array_TEMP = array_sem_iguais.map((obj) => {
-      return obj.split("==>")[1]
+      return obj.split('==>')[1]
     })
 
     // console.log("array_TEMP", array_TEMP)
@@ -72,11 +72,11 @@ export default function App(props) {
   }
 
   function converteData(DataDDMMYY) {
-    const dataSplit = DataDDMMYY.split("-")
+    const dataSplit = DataDDMMYY.split('-')
     const novaData = new Date(
       parseInt(dataSplit[2], 10),
       parseInt(dataSplit[1], 10) - 1,
-      parseInt(dataSplit[0], 10)
+      parseInt(dataSplit[0], 10),
     )
     return novaData
   }
@@ -84,47 +84,47 @@ export default function App(props) {
   listaGlobal = listaGlobal
     .sort(compare)
     .filter((contactItem) => contactItem.message.contact.name !== null)
-    .filter((contactItem) => contactItem.message.contact.name !== "")
+    .filter((contactItem) => contactItem.message.contact.name !== '')
     .filter((contactItem) => contactItem.message.contact.name !== undefined)
     .filter((contactItem) =>
-      contactItem.message.contact.name.toLowerCase().includes(lowerBusca)
+      contactItem.message.contact.name.toLowerCase().includes(lowerBusca),
     )
 
   if (dataIni) {
     listaGlobal = listaGlobal.filter(
       (contactItem) =>
         contactItem.message.receivedAt >= dataIni ||
-        contactItem.message.sentAt >= dataIni
+        contactItem.message.sentAt >= dataIni,
     )
   }
   if (dataFim) {
     listaGlobal = listaGlobal.filter(
       (contactItem) =>
         contactItem.message.receivedAt <= dataFim ||
-        contactItem.message.sentAt <= dataFim
+        contactItem.message.sentAt <= dataFim,
     )
   }
   if (filterReceived) {
     listaGlobal = listaGlobal.filter(
-      (contactItem) => contactItem.message.direction === "incoming"
+      (contactItem) => contactItem.message.direction === 'incoming',
     )
   }
   if (filterSent) {
     listaGlobal = listaGlobal.filter(
-      (contactItem) => contactItem.message.direction === "outgoing"
+      (contactItem) => contactItem.message.direction === 'outgoing',
     )
   }
 
   useEffect(() => {
     console.log(new Date(dataIni).getDate())
-    console.log(new Date("2022-04-29T00:41:23").getDate())
-    console.log(converteData("2022-04-29T16:52:49"))
+    console.log(new Date('2022-04-29T00:41:23').getDate())
+    console.log(converteData('2022-04-29T16:52:49'))
     console.log(dataIni)
     console.log(dataFim)
   }, [dataIni, dataFim])
 
   useLayoutEffect(async () => {
-    const res = await get_an_URL("https://whatstv-api.herokuapp.com/logrobbu")
+    const res = await get_an_URL('https://whatstv-api.herokuapp.com/logrobbu')
     setListaGlobal(res)
   }, [])
 
@@ -163,22 +163,22 @@ export default function App(props) {
             type="text"
             ref={refdataIni}
             placeholder="Data Inicial"
-            onFocus={() => (refdataIni.current.type = "date")}
+            onFocus={() => (refdataIni.current.type = 'date')}
             onBlur={() =>
               refdataIni.current.value
-                ? (refdataIni.current.type = "date")
-                : (refdataIni.current.type = "text")
+                ? (refdataIni.current.type = 'date')
+                : (refdataIni.current.type = 'text')
             }
             onChange={(e) => setDataIni(e.target.value)}
           />
           <input
             type="text"
             ref={refdataFim}
-            onFocus={() => (refdataFim.current.type = "date")}
+            onFocus={() => (refdataFim.current.type = 'date')}
             onBlur={() =>
               refdataFim.current.value
-                ? (refdataFim.current.type = "date")
-                : (refdataFim.current.type = "text")
+                ? (refdataFim.current.type = 'date')
+                : (refdataFim.current.type = 'text')
             }
             placeholder="Data Final"
             onChange={(e) => setDataFim(e.target.value)}
@@ -195,8 +195,8 @@ export default function App(props) {
             </p>
             <p> {obj.message.direction} </p>
             <p>
-              {moment(obj.message.receivedAt).format("DD/MM/YYYY")}{" "}
-              {moment(obj.message.receivedAt).format("hh:mm:ss a")}
+              {moment(obj.message.receivedAt).format('DD/MM/YYYY')}{' '}
+              {moment(obj.message.receivedAt).format('hh:mm:ss a')}
             </p>
             <p className="itemMessage"> {obj.message.text}</p>
           </div>
