@@ -58,17 +58,35 @@ export default function App(props) {
   }
 
   function compare(a, b) {
-    if (
-      a.message.receivedAt > b.message.receivedAt ||
-      a.message.sentAt > b.message.sentAt
-    )
-      return -1
-    if (
-      a.message.receivedAt < b.message.receivedAt ||
-      a.message.sentAt < b.message.sentAt
-    )
-      return 1
+    var dataA = ""
+    var dataB = ""
+
+    if (a.message.receivedAt) {
+      dataA = a.message.receivedAt
+    } else {
+      dataA = a.message.sentAt
+    }
+    if (b.message.receivedAt) {
+      dataB = b.message.receivedAt
+    } else {
+      dataB = b.message.sentAt
+    }
+
+    if (dataA > dataB) return -1
+    if (dataA < dataB) return 1
     return 0
+
+    // if (
+    //   a.message.receivedAt > b.message.receivedAt ||
+    //   a.message.sentAt > b.message.sentAt
+    // )
+    //   return -1
+    // if (
+    //   a.message.receivedAt < b.message.receivedAt ||
+    //   a.message.sentAt < b.message.sentAt
+    // )
+    //   return 1
+    // return 0
   }
 
   function converteData(DataDDMMYY) {

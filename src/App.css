@@ -74,6 +74,17 @@ body{
   overflow-y: auto;
 }
 
+.content::-webkit-scrollbar {
+  width: 12px;
+  height: 4px;  
+}
+
+.content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 25px;
+  
+}
+
 .item{
   display: flex;
   color: white;
