@@ -93,17 +93,15 @@ export default function App(props) {
   if (dataIni) {
     listaGlobal = listaGlobal.filter(
       (contactItem) =>
-        moment(contactItem.message.receivedAt).format("YYYY-MM-DD") >=
-          dataIni ||
-        moment(contactItem.message.sentAt).format("YYYY-MM-DD") >= dataIni
+        contactItem.message.receivedAt >= dataIni ||
+        contactItem.message.sentAt >= dataIni
     )
   }
   if (dataFim) {
     listaGlobal = listaGlobal.filter(
       (contactItem) =>
-        moment(contactItem.message.receivedAt).format("YYYY-MM-DD") <=
-          dataFim ||
-        moment(contactItem.message.sentAt).format("YYYY-MM-DD") <= dataFim
+        contactItem.message.receivedAt <= dataFim ||
+        contactItem.message.sentAt <= dataFim
     )
   }
   if (filterReceived) {
