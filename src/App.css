@@ -1,76 +1,99 @@
-.App {
-  text-align: center;
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  text-decoration: none;
+  border: none;
+  
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body{
+  background-color: #3E3E3E;  
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.main {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.logHeader {
   color: white;
+  height: 90px;
+  display: flex;
+  padding: 0 20px;
+  align-items: center;  
+  justify-content: space-between;
+  background-color: #333333;  
+  overflow-y: auto;
 }
 
-.App-link {
-  color: #61dafb;
+.logFilter{
+  display: flex;
+  min-width: 700px;
+  justify-content: space-evenly;  
+  
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.logFilter input{
+  width: 180px;
+  height: 30px;
+  border-radius: 5px;
+  padding: 5px;
+}
+.logFilter .filterChecbox{
+  /* display: flex;   */
+  /* justify-content: center; */
+  /* align-items: center; */
 }
 
-
-/* by ccs */
-.logFilter {
-  width: 50%; /* define a largura do campo */ 
-  position: relative;  /* cria o contexto de posicionamento do botão */ 
-}
-label {display:block;}
-input {width: 50%;} /* define a largura do campo igual a largura do container */
-input,  button {padding: 10px;}
-input {background: burlywood;}
-button {
-  position: absolute;   
-  top: 10; 
-  right: 10;
-  /* posiciona o botão em relação ao container, mas
-  como o campo está exatamente contido no container
-  o posicionamento se dá também em relação ao campo */
+.logFilter .filterReceived{
+  display: flex;  
+  /* justify-content: center; */
+  align-items: center;
 }
 
+.logFilter .filterReceived input{
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+}
 
-/***** Para classe de data busca *****/
-.dataFilter {
-  width: 50%; /* define a largura do campo */ 
-  position: relative;  /* cria o contexto de posicionamento do botão */ 
+.logFilter .filterReceived label{
+  font-size: 12px;  
 }
-label {display:block;}
-input {width: 50%;} /* define a largura do campo igual a largura do container */
-input,  button {padding: 10px;}
-input {background: rgb(122, 241, 249);}
-button {
-  position: absolute;   
-  top: 20; 
-  right: 20;
-  /* posiciona o botão em relação ao container, mas
-  como o campo está exatamente contido no container
-  o posicionamento se dá também em relação ao campo */
+
+.content {  
+  flex: 1;  
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  overflow-y: auto;
 }
+
+.item{
+  display: flex;
+  color: white;
+  margin-bottom: 5px;    
+}
+
+.item p{
+  margin-right: 15px;
+  min-width: 220px;  
+  max-width: 150px;  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemMessage{
+  max-width: 600px !important;
+  word-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
