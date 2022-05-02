@@ -135,7 +135,7 @@ export default function App(props) {
     )
   }
 
-  listaGlobal = listaGlobal.sort(compare)
+  // listaGlobal = listaGlobal.sort(compare)
 
   useEffect(() => {
     // console.log(new Date(dataIni).getDate())
@@ -229,7 +229,7 @@ export default function App(props) {
             <div className="item">
               <p>{obj.message.contact.name}</p>
               <p>
-                {obj.message.contact.mainWhatsapp.countryCode}
+                {obj.message.contact.mainWhatsapp.countryCode}{" "}
                 {obj.message.contact.mainWhatsapp.phoneNumber}
               </p>
               <p> {obj.message.direction} </p>
