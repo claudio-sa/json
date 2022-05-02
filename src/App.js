@@ -90,12 +90,13 @@ export default function App(props) {
     // return 0
   }
 
+  // "dddddddd-mmmm-yyyyyyy" '2022-04-29T16:52:49'
   function converteData(DataDDMMYY) {
-    const dataSplit = DataDDMMYY.split("-")
+    const dataSplit = DataDDMMYY.split("-") //[2022, 04, 29T16....]
     const novaData = new Date(
-      parseInt(dataSplit[2], 10),
-      parseInt(dataSplit[1], 10) - 1,
-      parseInt(dataSplit[0], 10)
+      parseInt(dataSplit[0], 10), /// ANO
+      parseInt(dataSplit[1], 10) - 1, /// MES
+      parseInt(dataSplit[2], 10) //DIA
     )
     return novaData
   }
@@ -134,12 +135,24 @@ export default function App(props) {
     )
   }
 
+  listaGlobal = listaGlobal.sort(compare)
+
   useEffect(() => {
-    console.log(new Date(dataIni).getDate())
-    console.log(new Date("2022-04-29T00:41:23").getDate())
-    console.log(converteData("2022-04-29T16:52:49"))
-    console.log(dataIni)
-    console.log(dataFim)
+    // console.log(new Date(dataIni).getDate())
+    // console.log(new Date('2022-04-29T00:41:23').getDate())
+    // console.log(converteData('2022-04-29T16:52:49'))
+    // console.log(dataIni)
+    // console.log(dataFim)
+
+    // console.log(new Date('2022-04-29T00:41:23'))
+    // console.log(new Date(dataIni) + 1)
+    // console.log(converteData('2022-04-29T16:52:49'))
+    if (dataIni) {
+      console.log("Data ", converteData(dataIni))
+    }
+    if (dataFim) {
+      console.log("Data ", converteData(dataFim))
+    }
   }, [dataIni, dataFim])
 
   useLayoutEffect(async () => {
@@ -180,6 +193,7 @@ export default function App(props) {
           />
           <input
             type="text"
+            value={dataIni}
             ref={refdataIni}
             placeholder="Data Inicial"
             onFocus={() => (refdataIni.current.type = "date")}
@@ -188,18 +202,21 @@ export default function App(props) {
                 ? (refdataIni.current.type = "date")
                 : (refdataIni.current.type = "text")
             }
-            onChange={(e) => setDataIni(e.target.value)}
+            onChange={(e) => (
+              setDataIni(e.target.value), setDataFim(e.target.value)
+            )}
           />
           <input
             type="text"
+            value={dataFim}
             ref={refdataFim}
+            placeholder="Data Final"
             onFocus={() => (refdataFim.current.type = "date")}
             onBlur={() =>
               refdataFim.current.value
                 ? (refdataFim.current.type = "date")
                 : (refdataFim.current.type = "text")
             }
-            placeholder="Data Final"
             onChange={(e) => setDataFim(e.target.value)}
           />
         </div>
