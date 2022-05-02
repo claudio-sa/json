@@ -47,7 +47,8 @@ export default function App(props) {
           array_via_map.push(parsed)
         }
       } catch (e) {
-        // console.log("Obj NAO OK:", "==>", parsed)
+        console.log("Obj NAO OK:", "==>", parsed)
+        console.count("Numero de Chats: ")
       }
     }
     const size_ARRAY = array_via_map.length - 1
@@ -100,7 +101,7 @@ export default function App(props) {
   }
 
   listaGlobal = listaGlobal
-    .sort(compare)
+    // .sort(compare)
     .filter((contactItem) => contactItem.message.contact.name !== null)
     .filter((contactItem) => contactItem.message.contact.name !== "")
     .filter((contactItem) => contactItem.message.contact.name !== undefined)
@@ -204,21 +205,33 @@ export default function App(props) {
         </div>
       </header>
       <div className="content">
-        {listaGlobal.map((obj) => (
-          <div className="item">
-            <p>{obj.message.contact.name}</p>
-            <p>
-              {obj.message.contact.mainWhatsapp.countryCode}
-              {obj.message.contact.mainWhatsapp.phoneNumber}
-            </p>
-            <p> {obj.message.direction} </p>
-            <p>
-              {moment(obj.message.receivedAt).format("DD/MM/YYYY")}{" "}
-              {moment(obj.message.receivedAt).format("hh:mm:ss a")}
-            </p>
-            <p className="itemMessage"> {obj.message.text}</p>
-          </div>
-        ))}
+        {listaGlobal
+          .slice(0)
+          .reverse()
+          .map((obj) => (
+            <div className="item">
+              <p>{obj.message.contact.name}</p>
+              <p>
+                {obj.message.contact.mainWhatsapp.countryCode}
+                {obj.message.contact.mainWhatsapp.phoneNumber}
+              </p>
+              <p> {obj.message.direction} </p>
+
+              {obj.message.receivedAt ? (
+                <p>
+                  {moment(obj.message.receivedAt).format("DD/MM/YYYY")}{" "}
+                  {moment(obj.message.receivedAt).format("hh:mm:ss a")}
+                </p>
+              ) : (
+                <p>
+                  {moment(obj.message.sentAt).format("DD/MM/YYYY")}{" "}
+                  {moment(obj.message.sentAt).format("hh:mm:ss a")}
+                </p>
+              )}
+
+              <p className="itemMessage"> {obj.message.text}</p>
+            </div>
+          ))}
       </div>
     </div>
   )
