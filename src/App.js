@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
-import axios from 'axios'
-import moment from 'moment' // para formatar datas etc
-import './App.css'
+import React, { useRef, useState, useEffect, useLayoutEffect } from "react"
+import axios from "axios"
+import moment from "moment" // para formatar datas etc
+import "./App.css"
 
-moment.locale('pt-br')
+moment.locale("pt-br")
 
 export default function App(props) {
   var [listaGlobal, setListaGlobal] = useState([])
-  var [busca, setBusca] = useState('')
+  var [busca, setBusca] = useState("")
   var [filterReceived, setFilterReceived] = useState(false)
   var [filterSent, setFilterSent] = useState(false)
   var [dataIni, setDataIni] = useState(null)
@@ -18,183 +18,100 @@ export default function App(props) {
 
   const lowerBusca = busca.toLowerCase()
 
-  async function get_an_URL(umaURL) {
+  function incrementDate(date) {
+    var dataAnoMesDia = String(date).split("-")
+    dataAnoMesDia[2] = String(Number(dataAnoMesDia[2]) + 1)
+
+    var day = dataAnoMesDia[2]
+    var month = dataAnoMesDia[1]
+    var year = dataAnoMesDia[0]
+
+    if (day <= 9) {
+      day = "0" + day
+    }
+    var newData = year + "-" + month + "-" + day
+    setDataFim(newData)
+  }
+
+  async function getAnURL(umaURL) {
     const response_data = await axios
       .create()
       .get(umaURL)
       .then((response) => response.data)
       .catch((err) => {
-        console.error('ops! ocorreu um erro' + err)
+        console.error("ops! ocorreu um erro" + err)
       })
 
     const iguais =
-      '\n============================================================================================================================='
-    const array_sem_iguais = response_data.split(iguais)
+      "\n============================================================================================================================="
+    const arraySemIguais = response_data.split(iguais)
 
-    // console.log("array_sem_iguais", array_sem_iguais)
-
-    const array_TEMP = array_sem_iguais.map((obj) => {
-      return obj.split('==>')[1]
+    const arrayTemp = arraySemIguais.map((obj) => {
+      return obj.split("==>")[1]
     })
 
-    // console.log("array_TEMP", array_TEMP)
-
-    var array_via_map = []
-    for (var i = 0; i < array_TEMP.length; i += 1) {
+    var arrayViaMap = []
+    for (var i = 0; i < arrayTemp.length; i += 1) {
       try {
-        var parsed = JSON.parse(array_TEMP[i])
+        var parsed = JSON.parse(arrayTemp[i])
         if (parsed.message) {
-          array_via_map.push(parsed)
+          arrayViaMap.push(parsed)
         }
       } catch (e) {
-        console.log('Obj NAO OK:', '==>', parsed)
-        console.count('Numero de Chats: ')
+        console.log("Obj NAO OK:", "==>", parsed)
+        console.count("Numero de Chats: ")
       }
     }
-    const size_ARRAY = array_via_map.length - 1
+    const sizeArray = arrayViaMap.length - 1
 
-    // console.log("array_via_map", array_via_map)
-
-    return array_via_map
-  }
-
-  function compare(a, b) {
-    var dataA = ''
-    var dataB = ''
-
-    if (a.message.receivedAt) {
-      dataA = a.message.receivedAt
-    } else {
-      dataA = a.message.sentAt
-    }
-    if (b.message.receivedAt) {
-      dataB = b.message.receivedAt
-    } else {
-      dataB = b.message.sentAt
-    }
-
-    if (dataA > dataB) return -1
-    if (dataA < dataB) return 1
-    return 0
-
-    // if (
-    //   a.message.receivedAt > b.message.receivedAt ||
-    //   a.message.sentAt > b.message.sentAt
-    // )
-    //   return -1
-    // if (
-    //   a.message.receivedAt < b.message.receivedAt ||
-    //   a.message.sentAt < b.message.sentAt
-    // )
-    //   return 1
-    // return 0
-  }
-
-  // "dddddddd-mmmm-yyyyyyy" '2022-04-29T16:52:49'
-  function converteData(DataDDMMYY) {
-    const dataSplit = DataDDMMYY.split('-') //[2022, 04, 29T16....]
-    const novaData = new Date(
-      parseInt(dataSplit[0], 10), /// ANO
-      parseInt(dataSplit[1], 10) - 1, /// MES
-      parseInt(dataSplit[2], 10), //DIA
-    )
-    return novaData
+    return arrayViaMap
   }
 
   listaGlobal = listaGlobal
-    // .sort(compare)
     .filter((contactItem) => contactItem.message.contact.name !== null)
-    .filter((contactItem) => contactItem.message.contact.name !== '')
+    .filter((contactItem) => contactItem.message.contact.name !== "")
     .filter((contactItem) => contactItem.message.contact.name !== undefined)
     .filter((contactItem) =>
-      contactItem.message.contact.name.toLowerCase().includes(lowerBusca),
+      contactItem.message.contact.name.toLowerCase().includes(lowerBusca)
     )
 
-  // se deixar apenas dataFim
-  // isto vai matar o proximo filtro
-  // adicioneis o !== MELHORAR
-  if (dataFim !== dataIni) {
+  if (dataIni) {
     listaGlobal = listaGlobal.filter(
       (contactItem) =>
         contactItem.message.receivedAt >= dataIni ||
-        contactItem.message.sentAt >= dataIni,
+        contactItem.message.sentAt >= dataIni
     )
   }
-  // se deixar apenas dataFim
-  // isto vai matar o proximo filtro
-  // adicioneis o !==
-  if (dataFim !== dataIni) {
+  if (dataFim) {
     listaGlobal = listaGlobal.filter(
       (contactItem) =>
         contactItem.message.receivedAt <= dataFim ||
-        contactItem.message.sentAt <= dataFim,
+        contactItem.message.sentAt <= dataFim
     )
   }
-
-  if (dataIni === dataFim) {
-    /// Grosseiramente ... adicionar + 1 na data final ... MAS
-    // em segundo os filtros acima matam este daqui ...
-    // ISTO AQUI PRECISA SER MELHORADO
-    var data_ANO_MES_DIA = String(dataFim).split('-')
-    data_ANO_MES_DIA[2] = String(Number(data_ANO_MES_DIA[2]) + 1)
-    console.log(
-      'Split',
-      data_ANO_MES_DIA[0],
-      data_ANO_MES_DIA[1],
-      data_ANO_MES_DIA[2],
-    )
-    var nova_FIM =
-      data_ANO_MES_DIA[0] +
-      '-' +
-      data_ANO_MES_DIA[1] +
-      '-' +
-      +'0' +
-      data_ANO_MES_DIA[2]
-    console.log(' Datas iguais:', dataIni, dataFim)
-    console.log(' Nova Data FIM:', nova_FIM)
-    // ateh aqui
-    //
-    listaGlobal = listaGlobal.filter(
-      (contactItem) =>
-        (contactItem.message.receivedAt >= dataIni ||
-          contactItem.message.sentAt >= dataIni) &&
-        (contactItem.message.receivedAt <= nova_FIM ||
-          contactItem.message.sentAt <= nova_FIM),
-    )
-  }
-
   if (filterReceived) {
     listaGlobal = listaGlobal.filter(
-      (contactItem) => contactItem.message.direction === 'incoming',
+      (contactItem) => contactItem.message.direction === "incoming"
     )
   }
   if (filterSent) {
     listaGlobal = listaGlobal.filter(
-      (contactItem) => contactItem.message.direction === 'outgoing',
+      (contactItem) => contactItem.message.direction === "outgoing"
     )
   }
 
-  // listaGlobal = listaGlobal.sort(compare)
-
   useEffect(() => {
-    // console.log(new Date(dataIni).getDate())
-    // console.log(new Date('2022-04-29T00:41:23').getDate())
-    // console.log(converteData('2022-04-29T16:52:49'))
-    // console.log(dataIni)
-    //console.log('IN NATURA', dataFim) //IN NATURA 2022-05-02
-    // console.log(new Date('2022-04-29T00:41:23'))
-    // console.log(new Date(dataIni) + 1)
-    // console.log(converteData('2022-04-29T16:52:49'))
-    if (dataIni) {
-      console.log('Data ', converteData(dataIni))
+    if (dataIni && dataFim && dataIni === dataFim) {
+      incrementDate(dataFim)
     }
-    if (dataFim) {
-      console.log('Data ', converteData(dataFim))
+
+    if (dataFim && dataIni > dataFim) {
+      setDataFim(dataIni)
     }
   }, [dataIni, dataFim])
 
   useLayoutEffect(async () => {
-    const res = await get_an_URL('https://whatstv-api.herokuapp.com/logrobbu')
+    const res = await getAnURL("https://whatstv-api.herokuapp.com/logrobbu")
     setListaGlobal(res)
   }, [])
 
@@ -234,28 +151,25 @@ export default function App(props) {
             value={dataIni}
             ref={refdataIni}
             placeholder="Data Inicial"
-            onFocus={() => (refdataIni.current.type = 'date')}
+            onFocus={() => (refdataIni.current.type = "date")}
             onBlur={() =>
               refdataIni.current.value
-                ? (refdataIni.current.type = 'date')
-                : (refdataIni.current.type = 'text')
+                ? (refdataIni.current.type = "date")
+                : (refdataIni.current.type = "text")
             }
-            onChange={(e) => (
-              setDataIni(e.target.value), setDataFim(e.target.value)
-            )}
+            onChange={(e) => setDataIni(e.target.value)}
           />
           <input
             type="text" //"date"
             value={dataFim}
             ref={refdataFim}
+            min={dataIni}
             placeholder="Data Final"
-            //min={dataIni + 1}
-            //defaultValue={dataIni + 1}
-            onFocus={() => (refdataFim.current.type = 'date')}
+            onFocus={() => (refdataFim.current.type = "date")}
             onBlur={() =>
               refdataFim.current.value
-                ? (refdataFim.current.type = 'date')
-                : (refdataFim.current.type = 'text')
+                ? (refdataFim.current.type = "date")
+                : (refdataFim.current.type = "text")
             }
             onChange={(e) => setDataFim(e.target.value)}
           />
@@ -269,20 +183,20 @@ export default function App(props) {
             <div className="item">
               <p>{obj.message.contact.name}</p>
               <p>
-                {obj.message.contact.mainWhatsapp.countryCode}{' '}
+                {obj.message.contact.mainWhatsapp.countryCode}{" "}
                 {obj.message.contact.mainWhatsapp.phoneNumber}
               </p>
               <p> {obj.message.direction} </p>
 
               {obj.message.receivedAt ? (
                 <p>
-                  {moment(obj.message.receivedAt).format('DD/MM/YYYY')}{' '}
-                  {moment(obj.message.receivedAt).format('hh:mm:ss a')}
+                  {moment(obj.message.receivedAt).format("DD/MM/YYYY")}{" "}
+                  {moment(obj.message.receivedAt).format("hh:mm:ss a")}
                 </p>
               ) : (
                 <p>
-                  {moment(obj.message.sentAt).format('DD/MM/YYYY')}{' '}
-                  {moment(obj.message.sentAt).format('hh:mm:ss a')}
+                  {moment(obj.message.sentAt).format("DD/MM/YYYY")}{" "}
+                  {moment(obj.message.sentAt).format("hh:mm:ss a")}
                 </p>
               )}
 
